@@ -2,10 +2,19 @@ import { createStore as reduxCreateStore } from 'redux'
 import createReducer from './createReducer'
 
 const playerMove = (state, {row, col}) => {
+  const {disks} = state
+
+  // disk already taken
+  if (disks[row][col].status !== 0) return state
+
+  // gravity
+  // NOTE: disks are counted from top left
+  for (row = disks.length -1; disks[row][col].status !== 0; row--);
+  
   // state immutable
   const newDisks = [...state.disks]
   newDisks[row] = [...state.disks[row]]
-
+  
   // update disk
   newDisks[row][col] = {
     ...newDisks[row][col],
