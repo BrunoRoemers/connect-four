@@ -1,0 +1,18 @@
+.disk {
+  border-radius: 50%;
+  width: 100%;
+  height: 100%;
+  margin: auto;
+}
+
+.disk-empty {
+  background-color: gray;
+}
+
+.disk-p1 {
+  background-color: gold;
+}
+
+.disk-p2 {
+  background-color: red;
+}
