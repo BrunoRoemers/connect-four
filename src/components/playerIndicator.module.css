@@ -1,0 +1,30 @@
+.playerIndicator {
+  margin: 10px 20px;
+}
+
+.playerIndicator::after {
+  content: '';
+  display: block;
+  height: 8px;
+  border-radius: 4px;
+  width: 8px;
+  margin: 6px auto 0 auto;
+}
+
+.active::after {
+  width: auto;
+  margin: 6px -6px 0 -6px;
+}
+
+.p1::after {
+  background-color: gold;
+}
+
+.p2::after {
+  background-color: red;
+}
+
+
+
+
+
