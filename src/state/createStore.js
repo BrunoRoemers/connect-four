@@ -1,4 +1,4 @@
-import { createStore as reduxCreateStore } from 'redux'
+import { createStore as reduxCreateStore, compose } from 'redux'
 import createReducer from './createReducer'
 
 const playerMove = (state, {row, col}) => {
@@ -43,9 +43,17 @@ const reducer = createReducer(initState, {
   PLAYER_MOVE: playerMove,
 })
 
+const debugEnhancer = () => {
+  // window not available during build
+  if (typeof window === 'undefined') return compose
+
+  return window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+}
+
+
 const createStore = () =>
   reduxCreateStore(
     reducer,
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+    debugEnhancer(),
   )
 export default createStore
