@@ -26,13 +26,9 @@ const playerMove = (state, {row, col}) => {
 
   // lines
   const lines = getLines(disks, row, col, currentPlayer)
-  const winner = getWinner(lines)
-  const winningDisks = getWinningDisks(lines)
-
-  // TEMP
-  if (winner) console.log('winner: ', winner)
-
+  
   // highlight winning lines
+  const winningDisks = getWinningDisks(lines)
   for (const disk of winningDisks) {
     newDisks[disk.row][disk.col].highlight = true
   }
@@ -41,6 +37,7 @@ const playerMove = (state, {row, col}) => {
     ...state,
 
     disks: newDisks,
+    winner: getWinner(lines),
 
     // toggle player 1 and 2
     currentPlayer: currentPlayer === 1 ? 2 : 1,
@@ -56,6 +53,7 @@ const initState = {
       highlight: false,
     })
   ),
+  winner: false, // see player values
   currentPlayer: 1,
 }
 
