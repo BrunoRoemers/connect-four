@@ -1,4 +1,9 @@
-import { createStore as reduxCreateStore, compose } from 'redux'
+import {
+  createStore as reduxCreateStore,
+  compose,
+  combineReducers
+} from 'redux'
+import undoable from 'redux-undo'
 import createReducer from './createReducer'
 import getLines from '../helpers/getLines'
 import getWinner from '../helpers/getWinner'
@@ -14,9 +19,8 @@ const playerMove = (state, {row, col}) => {
   // NOTE: disks are counted from top left
   for (row = disks.length -1; disks[row][col].player !== false; row--);
   
-  // state immutable
-  const newDisks = [...disks]
-  newDisks[row] = [...disks[row]]
+  // clone disks (immutable)
+  const newDisks = disks.map(row => [...row])
   
   // update disk
   newDisks[row][col] = {
@@ -30,7 +34,10 @@ const playerMove = (state, {row, col}) => {
   // highlight winning lines
   const winningDisks = getWinningDisks(lines)
   for (const disk of winningDisks) {
-    newDisks[disk.row][disk.col].highlight = true
+    newDisks[disk.row][disk.col] = {
+      ...newDisks[disk.row][disk.col],
+      highlight: true,
+    }
   }
 
   return {
@@ -57,8 +64,12 @@ const initState = {
   currentPlayer: 1,
 }
 
-const reducer = createReducer(initState, {
+const gameReducer = createReducer(initState, {
   PLAYER_MOVE: playerMove,
+})
+
+const rootReducer = combineReducers({
+  game: undoable(gameReducer),
 })
 
 const debugEnhancer = () => {
@@ -71,7 +82,7 @@ const debugEnhancer = () => {
 
 const createStore = () =>
   reduxCreateStore(
-    reducer,
+    rootReducer,
     debugEnhancer(),
   )
 export default createStore

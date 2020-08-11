@@ -11,8 +11,8 @@ const PlayerIndicator = ({player, active}) => {
 }
 
 // redux
-const mapStateToProps = ({currentPlayer}, {player}) => ({
-  active: currentPlayer === player,
+const mapStateToProps = (state, props) => ({
+  active: state.game.present.currentPlayer === props.player,
 })
 
 export default connect(mapStateToProps)(PlayerIndicator)

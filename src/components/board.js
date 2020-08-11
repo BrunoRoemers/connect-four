@@ -3,8 +3,8 @@ import Disk from './disk'
 import { connect } from 'react-redux'
 import s from './board.module.css'
 
-const mapStateToProps = ({disks}) => ({
-  disks,
+const mapStateToProps = (state) => ({
+  disks: state.game.present.disks,
 })
 
 export default connect(mapStateToProps, null)(Board)

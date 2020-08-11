@@ -11,7 +11,7 @@ const Title = ({winner}) => {
 }
 
 const mapStateToProps = (state) => ({
-  winner: state.winner,
+  winner: state.game.present.winner,
 })
 
 
