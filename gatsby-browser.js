@@ -1,3 +1,4 @@
+import 'normalize.css'
 import ReduxProvider from './src/state/reduxProvider'
 
 // add redux provider
