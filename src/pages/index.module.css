@@ -6,4 +6,5 @@
 
 .indicator-wpr {
   display: flex;
+  align-items: center;
 }
