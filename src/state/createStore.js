@@ -1,7 +1,8 @@
 import { createStore as reduxCreateStore, compose } from 'redux'
 import createReducer from './createReducer'
 import getLines from '../helpers/getLines'
-import getWinningLines from '../helpers/getWinningLines'
+import getWinner from '../helpers/getWinner'
+import getWinningDisks from '../helpers/getWinningDisks'
 
 const playerMove = (state, {row, col}) => {
   const {disks, currentPlayer} = state
@@ -25,10 +26,16 @@ const playerMove = (state, {row, col}) => {
 
   // lines
   const lines = getLines(disks, row, col, currentPlayer)
+  const winner = getWinner(lines)
+  const winningDisks = getWinningDisks(lines)
 
-  console.log(lines)
+  // TEMP
+  if (winner) console.log('winner: ', winner)
 
-  if (getWinningLines(lines).length > 0) console.log('win!')
+  // highlight winning lines
+  for (const disk of winningDisks) {
+    newDisks[disk.row][disk.col].highlight = true
+  }
 
   return {
     ...state,

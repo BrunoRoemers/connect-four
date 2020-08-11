@@ -1,4 +1,5 @@
 .disk {
+  box-sizing: border-box;
   border-radius: 50%;
   width: 100%;
   height: 100%;
@@ -15,4 +16,8 @@
 
 .disk-p2 {
   background-color: red;
+}
+
+.highlight {
+  border: 3px solid black;
 }
