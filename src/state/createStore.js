@@ -64,8 +64,11 @@ const initState = {
   currentPlayer: 1,
 }
 
+const gameReset = (state, action) => initState
+
 const gameReducer = createReducer(initState, {
   PLAYER_MOVE: playerMove,
+  GAME_RESET: gameReset,
 })
 
 const rootReducer = combineReducers({

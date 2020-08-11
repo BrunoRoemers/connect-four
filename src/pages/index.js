@@ -3,7 +3,7 @@ import Board from '../components/board'
 import PlayerIndicator from '../components/playerIndicator'
 import Title from '../components/title'
 import Undo from '../components/undo'
-import Restart from '../components/restart'
+import Reset from '../components/reset'
 import s from './index.module.css'
 
 export default function Home() {
@@ -13,7 +13,7 @@ export default function Home() {
       <div className={s.indicatorWpr}>
         <PlayerIndicator player={1}/>
         <Undo/>
-        <Restart/>
+        <Reset/>
         <PlayerIndicator player={2}/> 
       </div>
       <Board/>
