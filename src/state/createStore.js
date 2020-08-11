@@ -1,8 +1,9 @@
 import { createStore as reduxCreateStore, compose } from 'redux'
 import createReducer from './createReducer'
+import isWinningMove from '../helpers/isWinningMove'
 
 const playerMove = (state, {row, col}) => {
-  const {disks} = state
+  const {disks, currentPlayer} = state
 
   // disk already taken
   if (disks[row][col].status !== 0) return state
@@ -12,14 +13,17 @@ const playerMove = (state, {row, col}) => {
   for (row = disks.length -1; disks[row][col].status !== 0; row--);
   
   // state immutable
-  const newDisks = [...state.disks]
-  newDisks[row] = [...state.disks[row]]
+  const newDisks = [...disks]
+  newDisks[row] = [...disks[row]]
   
   // update disk
   newDisks[row][col] = {
     ...newDisks[row][col],
-    status: state.currentPlayer,
+    status: currentPlayer,
   }
+
+  // check win
+  console.log(isWinningMove(disks, row, col, currentPlayer))
 
   return {
     ...state,
@@ -27,7 +31,7 @@ const playerMove = (state, {row, col}) => {
     disks: newDisks,
 
     // toggle player 1 and 2
-    currentPlayer: state.currentPlayer === 1 ? 2 : 1,
+    currentPlayer: currentPlayer === 1 ? 2 : 1,
   }
 }
 
