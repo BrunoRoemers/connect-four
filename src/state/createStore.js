@@ -7,11 +7,11 @@ const playerMove = (state, {row, col}) => {
   const {disks, currentPlayer} = state
 
   // disk already taken
-  if (disks[row][col].player !== 0) return state
+  if (disks[row][col].player !== false) return state
 
   // gravity
   // NOTE: disks are counted from top left
-  for (row = disks.length -1; disks[row][col].player !== 0; row--);
+  for (row = disks.length -1; disks[row][col].player !== false; row--);
   
   // state immutable
   const newDisks = [...disks]
@@ -43,7 +43,11 @@ const playerMove = (state, {row, col}) => {
 const initState = {
   // 6 rows x 7 columns
   disks: new Array(6).fill(
-    new Array(7).fill({player: 0})
+    new Array(7).fill({
+      // data for a single disk
+      player: false, // false (no player), 1 (player 1), 2 (player 2)
+      highlight: false,
+    })
   ),
   currentPlayer: 1,
 }
