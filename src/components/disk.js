@@ -1,9 +1,7 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import playerMove from '../state/playerMove'
 import s from './disk.module.css'
 
-const Disk = ({row, col, player, highlight, makePlayerMove}) => {
+const Disk = ({row, col, player, highlight, onClick}) => {
   // NOTE: css grid counts from 1
   const gridArea = `${row + 1} / ${col + 1} / span 1 / span 1`
 
@@ -11,18 +9,13 @@ const Disk = ({row, col, player, highlight, makePlayerMove}) => {
     <div
       className={cn(player, highlight)}
       style={{gridArea: gridArea}}
-      onClick={makePlayerMove(row, col)}
+      onClick={onClick}
     >
     </div>
   )
 }
 
-// redux
-const mapDispatchToProps = dispatch => ({
-  makePlayerMove: (row, col) => () => dispatch(playerMove(row, col)),
-})
-
-export default connect(null, mapDispatchToProps)(Disk)
+export default Disk
 
 // css classes
 const cn = (player, highlight) => {
