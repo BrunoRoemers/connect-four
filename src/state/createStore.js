@@ -1,46 +1,78 @@
-import { createStore as reduxCreateStore, compose } from 'redux'
+import {
+  createStore as reduxCreateStore,
+  compose,
+  combineReducers
+} from 'redux'
+import undoable from 'redux-undo'
 import createReducer from './createReducer'
+import getLines from '../helpers/getLines'
+import getWinner from '../helpers/getWinner'
+import getWinningDisks from '../helpers/getWinningDisks'
 
 const playerMove = (state, {row, col}) => {
-  const {disks} = state
+  const {disks, currentPlayer} = state
 
   // disk already taken
-  if (disks[row][col].status !== 0) return state
+  if (disks[row][col].player !== false) return state
 
   // gravity
   // NOTE: disks are counted from top left
-  for (row = disks.length -1; disks[row][col].status !== 0; row--);
+  for (row = disks.length -1; disks[row][col].player !== false; row--);
   
-  // state immutable
-  const newDisks = [...state.disks]
-  newDisks[row] = [...state.disks[row]]
+  // clone disks (immutable)
+  const newDisks = disks.map(row => [...row])
   
   // update disk
   newDisks[row][col] = {
     ...newDisks[row][col],
-    status: state.currentPlayer,
+    player: currentPlayer,
+  }
+
+  // lines
+  const lines = getLines(disks, row, col, currentPlayer)
+  
+  // highlight winning lines
+  const winningDisks = getWinningDisks(lines)
+  for (const disk of winningDisks) {
+    newDisks[disk.row][disk.col] = {
+      ...newDisks[disk.row][disk.col],
+      highlight: true,
+    }
   }
 
   return {
     ...state,
 
     disks: newDisks,
+    winner: getWinner(lines),
 
     // toggle player 1 and 2
-    currentPlayer: state.currentPlayer === 1 ? 2 : 1,
+    currentPlayer: currentPlayer === 1 ? 2 : 1,
   }
 }
 
 const initState = {
   // 6 rows x 7 columns
   disks: new Array(6).fill(
-    new Array(7).fill({status: 0})
+    new Array(7).fill({
+      // data for a single disk
+      player: false, // false (no player), 1 (player 1), 2 (player 2)
+      highlight: false,
+    })
   ),
+  winner: false, // see player values
   currentPlayer: 1,
 }
 
-const reducer = createReducer(initState, {
+const gameReset = (state, action) => initState
+
+const gameReducer = createReducer(initState, {
   PLAYER_MOVE: playerMove,
+  GAME_RESET: gameReset,
+})
+
+const rootReducer = combineReducers({
+  game: undoable(gameReducer),
 })
 
 const debugEnhancer = () => {
@@ -53,7 +85,7 @@ const debugEnhancer = () => {
 
 const createStore = () =>
   reduxCreateStore(
-    reducer,
+    rootReducer,
     debugEnhancer(),
   )
 export default createStore
